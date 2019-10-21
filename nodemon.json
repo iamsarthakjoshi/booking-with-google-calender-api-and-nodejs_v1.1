@@ -1,0 +1,9 @@
+{
+  "execMap": {
+    "js": "./node_modules/.bin/babel-node"
+  },
+  "env": {
+    "NODE_ENV": "development",
+    "NODE_PATH": "./src"
+  }
+}
