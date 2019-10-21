@@ -1,13 +1,16 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+
 import routes from 'routes'
 
 const app = express()
-const PORT = 3000
+const PORT = 8081
 
 
 
 app.use(bodyParser.json())
+app.use(cookieParser())
 
 app.use('/', routes)
 
