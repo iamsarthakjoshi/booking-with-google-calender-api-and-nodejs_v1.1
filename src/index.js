@@ -5,9 +5,7 @@ import cookieParser from 'cookie-parser'
 import routes from 'routes'
 
 const app = express()
-const PORT = 8081
-
-
+const PORT = process.env.PORT
 
 app.use(bodyParser.json())
 app.use(cookieParser())

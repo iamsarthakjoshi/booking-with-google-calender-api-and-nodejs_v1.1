@@ -1,7 +1,7 @@
 
-import { getDaysTimeSlotStatus } from 'services/googleApi'
+import { getDaysTimeSlotStatus } from 'services/calendar'
 
-export const getMonthlyTimeSlotStatus =  async (req, res) => {
+export const getMonthlyTimeSlotsStatus =  async (req, res) => {
 
   const { cookies: { token }, query: { year } } = req
 
@@ -11,5 +11,13 @@ export const getMonthlyTimeSlotStatus =  async (req, res) => {
 
   const days = await getDaysTimeSlotStatus(token, startDate, endDate)
 
-  res.send({ success:  true, days });
+  res.send({ success: true, days });
+}
+
+export const getTimeSlotsForGivenDay = (req, res) => {
+  res.send('timeslots')
+}
+
+export const bookNewAppointment = (req, res) => {
+  res.send('new appointment booked')
 }
