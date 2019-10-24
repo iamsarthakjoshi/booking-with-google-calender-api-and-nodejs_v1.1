@@ -3,7 +3,7 @@ import { forEach, isEqual, isUndefined, differenceWith } from 'loadsh'
 
 import { totalFixedTimeSlots } from 'constants/common'
 import { getBookedEvents } from 'services/googleApi'
-import { getFilteredBookedAppoinments, getBookedEventsForEachDay, getFixedISOTimeSolts} from 'utils'
+import { getFilteredBookedAppoinments, getBookedEventsForEachDay, getFixedISOTimeSolts, getBookedAppointmentDateTime} from 'utils'
 
 export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
   const days = [];
@@ -25,12 +25,9 @@ export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
 
 export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
   const { data: { items } } = await getBookedEvents(startTime, endTime)
-  const bookedApps = getFilteredBookedAppoinments(items)
+  const bookedApps = getBookedAppointmentDateTime(items)
   const fixedTimeSlots = getFixedISOTimeSolts(startTime)
+  const availableTimeSlots = differenceWith(fixedTimeSlots, bookedApps, isEqual)
 
-  // TODO: get start and end time from bookedApps to compare with fixedTimeSlots
-
-  const a = differenceWith(fixedTimeSlots, bookedApps, isEqual)
-
-  return a
+  return availableTimeSlots
 }
