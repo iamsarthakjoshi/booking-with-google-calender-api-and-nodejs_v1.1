@@ -13,7 +13,7 @@ const router = express.Router()
 
 router.get('/days', checkLogin, getMonthlyTimeSlotsStatus)
 
-router.get('/timeslot', checkLogin, getTimeSlotsForGivenDay)
+router.get('/timeslots', checkLogin, getTimeSlotsForGivenDay)
 
 router.get('/book', checkLogin, bookNewAppointment)
 
