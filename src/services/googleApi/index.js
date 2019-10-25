@@ -1,12 +1,7 @@
 import { google } from 'googleapis'
 
-export const oAuthClient = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID, 
-  process.env.GOOGLE_CLIENT_SECRET, 
-  process.env.GOOGLE_REDIRECT_URI
-);
-
 const calendar = google.calendar('v3')
+const oAuthClient = getOAuthClient()
 
 export const getBookedEvents = (startDate, endDate) => {
   return new Promise((resolve, reject) => {
@@ -18,11 +13,34 @@ export const getBookedEvents = (startDate, endDate) => {
       auth: oAuthClient,
       singleEvents: true,
       orderBy: 'startTime'
-    }, function(err, response) {
+    }, (err, response) => {
       if(err) reject(new Error('Error fetching booked events'))
       resolve(response)
     })
   })
+}
+
+export const insertNewEvent = (eventResource) => {
+  console.log(`api: insert new event`)
+  return new Promise((resolve, reject) => {
+    calendar.events.insert({
+      calendarId: '15suli79te2e0qfd533pcb8q4g@group.calendar.google.com',
+      auth: oAuthClient,
+      resource: eventResource,
+    }, (err, response) => {
+      if(err) reject(new Error('Error inserting new event'))
+      resolve(response)
+    })
+  })
+  
+}
+
+function getOAuthClient(){
+  return new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID, 
+    process.env.GOOGLE_CLIENT_SECRET, 
+    process.env.GOOGLE_REDIRECT_URI
+  )
 }
 
 export const getAccessToken = (code) => {
@@ -44,8 +62,6 @@ export const getOAuthClientUrl = () => {
 export const setOAuthCredentials = (token) => {
   oAuthClient.setCredentials(token);
 }
-
-//TODO: put this blocks to calender.js
 
 
 

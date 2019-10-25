@@ -1,29 +1,32 @@
-import moment from 'moment'
-import { countBy } from 'loadsh'
 
-import { makeMonthlyTimeSlotsStatus, makeTimeSlotsForGivenDay } from 'services/calendar'
+import { sanitize, getStartDate, getEndDate, convertDateTimeToISOExplicitly } from 'utils'
+import { makeMonthlyTimeSlotsStatus, makeTimeSlotsForGivenDay, makeNewAppointment } from 'services/calendar'
 
 export const getMonthlyTimeSlotsStatus =  async (req, res) => {
-  const { cookies: { token }, query: { year }, query: { month } } = req
-  const startDate = new Date(year, month - 1, 1);
-  const endDate = new Date(year, month + 1, 0);
+  const { cookies: { token }, query: { year, month } } = req
+  const startDate = getStartDate(year, month, 1)
+  const endDate = getEndDate(year, month, 0)
   const days = await makeMonthlyTimeSlotsStatus(startDate, endDate)
 
-  res.send({ success: true, days });
+  res.send({ success: true, days })
 }
 
 export const getTimeSlotsForGivenDay = async (req, res) => {
-  const { query: { year }, query: { month }, query: { day } } = req
-
-  // const startTime = new Date(year, month - 1, day, 9, 30); // time not needed
-  // const endTime =new Date(year, month + 1, day, 18, 30);
-  const startTime = new Date(year, month - 1, day);
-  const endTime =new Date(year, month + 1, day);
-
+  const { query: { year, month, day } } = req
+  const startTime = getStartDate(year, month, day)
+  const endTime = getEndDate(year, month, day)
   const timeslots = await makeTimeSlotsForGivenDay(startTime, endTime)
-  res.send(timeslots)
+
+  res.send({ success: true, timeslots})
 }
 
-export const bookNewAppointment = (req, res) => {
-  res.send('new appointment booked')
+export const bookNewAppointment = async (req, res) => {
+  let { query: { year, month, day, hour, minute } } = req
+  const startTime = getStartDate(year, month, day)
+  const endTime = getEndDate(year, month, day)
+  // const requestedDateTime = {year: year, month: month, day: day, hour: hour, minute: minute}
+  
+  const newAppointment = await makeNewAppointment(startTime, endTime, req)
+
+  res.send(newAppointment)
 }

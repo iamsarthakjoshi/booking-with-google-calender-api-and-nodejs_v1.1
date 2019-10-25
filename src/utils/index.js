@@ -19,32 +19,6 @@ export const getFilteredBookedAppoinments = (items) => {
 
 /**
  * 
- * @param {*} items 
- */
-export const getBookedAppointmentDateTime = (items) => {
-  const filteredApps = getFilteredBookedAppoinments(items)
-  
-  return filteredApps.map(({ start , end }) => ({
-      start: formatToISO(start.dateTime), 
-      end: formatToISO(end.dateTime)
-    })
-  )
-}
-
-/** 
-  Get no. of booked events for each daily on a monthly basis
-  @params
-*/
-export const getBookedEventsForEachDay = (items) => {
-  const filteredBookedAppoinments = getFilteredBookedAppoinments(items)
-  const bookedEventsForEachDay = filteredBookedAppoinments.map(
-    (appointment,i)=> moment(appointment.start.dateTime).date()
-    )
-  return countBy(bookedEventsForEachDay)
-}
-
-/**
- * 
  * @param {*} dateOfAppointment 
  */
 export const getFixedISOTimeSolts = (dateOfAppointment) => {
@@ -56,5 +30,22 @@ export const getFixedISOTimeSolts = (dateOfAppointment) => {
   return fixedTimeSlots
 }
 
-const formatFullDateTime = (dateTime) => moment(dateTime).format('YYYY-MM-DD')
-const formatToISO= (dateTime) => new Date(dateTime).toISOString();
+export const sanitize = (dateTime) => {
+  return (dateTime.toString().length < 2 ? '0': '') + dateTime
+}
+
+export const getStartDate = (year, month, day) => {
+  return new Date(year, month - 1, day)
+}
+
+export const getEndDate = (year, month, day) => {
+  return new Date(year, month + 1, day)
+}
+
+export const convertDateTimeToISOExplicitly = (requestedDateTime) => {
+  let { query: { year, month, day, hour, minute } } = requestedDateTime
+  return `${sanitize(year)}-${sanitize(month)}-${sanitize(day)}T${sanitize(hour)}:${sanitize(minute)}:00.000Z`
+}
+
+export const formatFullDateTime = (dateTime) => moment(dateTime).format('YYYY-MM-DD')
+export const formatToISO = (dateTime) => new Date(dateTime).toISOString();

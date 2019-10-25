@@ -1,33 +1,92 @@
 import moment from 'moment'
-import { forEach, isEqual, isUndefined, differenceWith } from 'loadsh'
+import { isEqual, isUndefined, differenceWith, countBy } from 'loadsh'
 
 import { totalFixedTimeSlots } from 'constants/common'
-import { getBookedEvents } from 'services/googleApi'
-import { getFilteredBookedAppoinments, getBookedEventsForEachDay, getFixedISOTimeSolts, getBookedAppointmentDateTime} from 'utils'
+import { getBookedEvents, insertNewEvent } from 'services/googleApi'
+import { getFilteredBookedAppoinments, getFixedISOTimeSolts, formatToISO, convertDateTimeToISOExplicitly} from 'utils'
 
 export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
-  const days = [];
-  const totalNoOfDays = endDate.getDate();
-
   const { data: { items } } = await getBookedEvents(startDate, endDate)
   const bookedEventsForEachDay = getBookedEventsForEachDay(items)
-  
-  for(let i = 1; i <= totalNoOfDays; i++) {
-    if(bookedEventsForEachDay[i] < totalFixedTimeSlots 
-      || isUndefined(bookedEventsForEachDay[i]))
-      days.push({day: i, hasTimeSlots: true})
-    else
-      days.push({day: i, hasTimeSlots: false})
-  }
+  const totalNoOfDays = endDate.getDate();
+  const timeSlotsStatus = getTimeSlotStatus(bookedEventsForEachDay, totalNoOfDays)
 
-  return days
+  return timeSlotsStatus
 }
 
 export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
+  const availableTimeSlots = await getAvailableTimeSlots(startTime, endTime)
+  return availableTimeSlots
+}
+
+export const makeNewAppointment = async (startTime, endTime, requestedDateTime) => {
+  const availableTimeSlots = await getAvailableTimeSlots(startTime, endTime)
+  const reqISODateTime = convertDateTimeToISOExplicitly(requestedDateTime)
+  // check if request booking time matches with available time slots
+  var isValidTimeSlot = availableTimeSlots.some(slot=>moment(slot.start).isSame(reqISODateTime));
+
+
+  
+  // const newEvent = await insertNewEvent()
+  return isValidTimeSlot
+}
+
+/**
+ * Get diff. btwn. Fixed Time Slots and Booked Appointments
+ * and return array object
+ * @param {*} startTime 
+ * @param {*} endTime 
+ */
+const getAvailableTimeSlots = async (startTime, endTime) => {
   const { data: { items } } = await getBookedEvents(startTime, endTime)
   const bookedApps = getBookedAppointmentDateTime(items)
   const fixedTimeSlots = getFixedISOTimeSolts(startTime)
   const availableTimeSlots = differenceWith(fixedTimeSlots, bookedApps, isEqual)
-
   return availableTimeSlots
+}
+
+/**
+ * Extract start and end time of booked appointments 
+ * and return them as an array object.
+ * @param {*} items 
+ */
+const getBookedAppointmentDateTime = (items) => {
+  const filteredApps = getFilteredBookedAppoinments(items)
+  return filteredApps.map(({ start , end }) => ({
+      start: formatToISO(start.dateTime), 
+      end: formatToISO(end.dateTime)
+    })
+  )
+}
+
+/** 
+ * Get no. of booked events for each daily on a monthly basis.
+ * @param {*} items
+*/
+const getBookedEventsForEachDay = (items) => {
+  const filteredBookedAppoinments = getFilteredBookedAppoinments(items)
+  const bookedEventsForEachDay = filteredBookedAppoinments.map(
+    (appointment, i) => moment(appointment.start.dateTime).date())
+  // count no of booked events for each day
+  const noOfBookedEvents = countBy(bookedEventsForEachDay)
+  return noOfBookedEvents
+}
+
+/**
+ * Get timeslot avaibility for each day of given MM and YYYY.
+ * totalFixedTimeSlots (from ./utils) gives total no. of fixed
+ * time slots.
+ * @param {*} bookedEventsForEachDay 
+ * @param {*} totalNoOfDays 
+ */
+const getTimeSlotStatus = (bookedEventsForEachDay, totalNoOfDays) => {
+  const status = []
+  for(let i = 1; i <= totalNoOfDays; i++) {
+    if(bookedEventsForEachDay[i] < totalFixedTimeSlots 
+      || isUndefined(bookedEventsForEachDay[i]))
+      status.push({day: i, hasTimeSlots: true})
+    else
+    status.push({day: i, hasTimeSlots: false})
+  }
+  return status
 }
