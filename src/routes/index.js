@@ -1,9 +1,9 @@
 import express from 'express'
 
 import { checkLogin } from 'middlewares/checkLogin'
+import { checkQueryParams } from 'middlewares/checkQueryParams'
 import { handleCallBacks } from 'middlewares/handleOAuthCallbacks'
-import 
-{ 
+import {
   getMonthlyTimeSlotsStatus,
   getTimeSlotsForGivenDay,
   bookNewAppointment
@@ -11,12 +11,12 @@ import
 
 const router = express.Router()
 
-router.get('/days', checkLogin, getMonthlyTimeSlotsStatus)
+router.get('/days', checkLogin, checkQueryParams, getMonthlyTimeSlotsStatus)
 
-router.get('/timeslots', checkLogin, getTimeSlotsForGivenDay)
+router.get('/timeslots', checkLogin, checkQueryParams, getTimeSlotsForGivenDay)
 
-router.get('/book', checkLogin, bookNewAppointment)
+router.get('/book', checkLogin, checkQueryParams, bookNewAppointment)
 
 router.get('/oauth/callback', handleCallBacks)
 
-module.exports = router;
+module.exports = router
