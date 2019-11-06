@@ -1,4 +1,4 @@
-import { getStartDate, getEndDate } from 'utils'
+import { getStartDate, getEndDate, getDateTime, getEndDateTime } from 'utils'
 import {
   makeMonthlyTimeSlotsStatus,
   makeTimeSlotsForGivenDay,
@@ -7,11 +7,11 @@ import {
 
 export const getMonthlyTimeSlotsStatus = async (req, res) => {
   const {
-    cookies: { token },
     query: { year, month }
   } = req
   const startDate = getStartDate(year, month, 1)
   const endDate = getEndDate(year, month, 0)
+
   const days = await makeMonthlyTimeSlotsStatus(startDate, endDate)
 
   res.send({ success: true, days })
@@ -21,8 +21,10 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
   const {
     query: { year, month, day }
   } = req // date-time requested by the user
-  const startTime = getStartDate(year, month, day)
-  const endTime = getEndDate(year, month, day)
+  // set time between every hours in 24 hr
+  const startTime = getDateTime(year, month, day, 0, 0)
+  const endTime = getDateTime(year, month, day, 23, 59)
+
   const timeslots = await makeTimeSlotsForGivenDay(startTime, endTime)
 
   res.send({ success: true, timeslots })
@@ -30,11 +32,23 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
 
 export const bookNewAppointment = async (req, res) => {
   let {
-    query: { year, month, day }
+    query: { year, month, day, hour, minute }
   } = req // booking date-time requested by the user
-  const startTime = getStartDate(year, month, day)
-  const endTime = getEndDate(year, month, day)
-  const newAppointment = await makeNewAppointment(startTime, endTime, req)
-  res.send('booknewapp')
-  // res.send({ success: newAppointment.isValid, newAppointment.message })
+  const startTime = getDateTime(year, month, day, hour, minute)
+  const endTime = getEndDateTime(year, month, day, hour, minute)
+
+  const isBooked = await makeNewAppointment(startTime, endTime)
+  const { status, result } = isBooked
+
+  let output = {}
+
+  if (status) {
+    output.success = true
+    output.startTime = result.startDate
+    output.endTime = result.endTime
+  } else {
+    output.success = false
+    output.message = result
+  }
+  res.send(output)
 }

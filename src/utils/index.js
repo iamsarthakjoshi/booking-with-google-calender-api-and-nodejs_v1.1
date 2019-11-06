@@ -1,43 +1,19 @@
-import moment from "moment"
-import { forEach, countBy } from "loadsh"
-
-import { fixedTimeSlots } from "constants/common"
+import moment from 'moment'
 
 /**
- *  Get booked appointments
- * @param {*} items
+ *  Filter events by excluding weekdays and time before
+ *  9AM and after 6PM
+ * @param {Google Calendar Event's items} items
  */
 export const getFilteredBookedAppoinments = (items) => {
-  const events = items.filter(
+  return items.filter(
     (data) =>
-      data.status === "confirmed" &&
-      (new Date(data.start.dateTime).getUTCDay() !== 0 &&
-        new Date(data.start.dateTime).getUTCDay() !== 6) &&
-      (moment(data.start.dateTime)
-        .utc()
-        .hours() > 8 &&
-        moment(data.start.dateTime)
-          .utc()
-          .hours() < 20)
+      data.status === 'confirmed' &&
+      (moment(data.start.dateTime).weekday() !== 0 &&
+        moment(data.start.dateTime).weekday() !== 6) &&
+      (moment(data.start.dateTime).hours() >= 9 &&
+        moment(data.start.dateTime).hours() <= 18)
   )
-  return events
-}
-
-/**
- *
- * @param {*} dateOfAppointment
- */
-export const getFixedISOTimeSolts = (dateOfAppointment) => {
-  const date = formatFullDateTime(dateOfAppointment)
-  forEach(fixedTimeSlots, (timeSlot, index) => {
-    fixedTimeSlots[index].start = formatToISO(`${date}T${timeSlot.start}`)
-    fixedTimeSlots[index].end = formatToISO(`${date}T${timeSlot.end}`)
-  })
-  return fixedTimeSlots
-}
-
-export const sanitizeDt = (dateTime) => {
-  return (dateTime.toString().length < 2 ? "0" : "") + dateTime
 }
 
 export const getStartDate = (year, month, day) => {
@@ -45,19 +21,48 @@ export const getStartDate = (year, month, day) => {
 }
 
 export const getEndDate = (year, month, day) => {
-  return new Date(year, month + 1, day)
+  return new Date(year, month, day)
 }
 
-export const convertDateTimeToISOExplicitly = (requestedDateTime) => {
-  let {
-    query: { year, month, day, hour, minute }
-  } = requestedDateTime
-  const fullDateTime = `${sanitizeDt(year)}-${sanitizeDt(month)}-${sanitizeDt(
-    day
-  )}T${sanitizeDt(hour)}:${sanitizeDt(minute)}:00.000Z`
-  return fullDateTime
+export const getDateTime = (year, month, day, hour, minute) => {
+  return new Date(year, month - 1, day, hour, minute)
 }
 
+export const getEndDateTime = (year, month, day, hour, minute) => {
+  const appointmentDuration = parseInt(process.env.APPOINTMENT_DURATION)
+  const tempDate = new Date(year, month - 1, day, hour, minute)
+  tempDate.setMinutes(tempDate.getMinutes() + appointmentDuration)
+  return tempDate
+}
+
+/**
+ * Format full iso date-time to only date, for eg:
+ * formatted date would be 2019-10-16
+ * @param {Date} dateTime
+ */
 export const formatFullDateTime = (dateTime) =>
-  moment(dateTime).format("YYYY-MM-DD")
-export const formatToISO = (dateTime) => new Date(dateTime).toISOString()
+  moment(dateTime).format('YYYY-MM-DD')
+
+export const hasDatesMatched = (d1, d2) => {
+  return moment(formatFullDateTime(d1).isSame(formatFullDateTime(d2)))
+}
+
+export const formatToISO = (dateTime) => new Date(dateTime)
+
+/**
+ *
+ * @param {Date} dateTime
+ * @param {Time String} timeString
+ */
+export const getModifiedDate = (dateTime, timeString) => {
+  const config = process.env
+  const time = moment(timeString, config.TIME_FORMAT)
+
+  return moment(dateTime)
+    .set({
+      hour: time.get('hour'),
+      minute: time.get('minute'),
+      second: time.get('second')
+    })
+    .toDate()
+}

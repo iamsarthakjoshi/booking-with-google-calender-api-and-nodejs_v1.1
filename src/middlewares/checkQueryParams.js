@@ -1,11 +1,10 @@
 import { differenceWith, isEqual, isEmpty, keys } from 'loadsh'
-import { msgMissingParams } from 'constants/common'
 
 /**
  * Check missing query parameters for days, timeslots and booking endpoint
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {http request} req
+ * @param {http response} res
+ * @param {next} next
  */
 export const checkQueryParams = (req, res, next) => {
   let queryKeyStrings = []
@@ -16,7 +15,10 @@ export const checkQueryParams = (req, res, next) => {
 
   // check if any missing params
   if (!isEmpty(allMissingParams)) {
-    sendRequest(res, msgMissingParams, allMissingParams)
+    res.send({
+      success: false,
+      message: `Request is missing parameter: ${allMissingParams}`
+    })
     return
   }
 
@@ -30,7 +32,7 @@ export const checkQueryParams = (req, res, next) => {
  */
 const getMissingParams = (queryKeyStrings, reqQuery) => {
   let tempParams = '' // prevent undefined with ''
-  const queryKeys = keys(reqQuery) // extract arr of key values from req's query
+  const queryKeys = keys(reqQuery) // extract arr of keys from req's query
 
   // get missing params by comparing queryKeys with queryKeyStrings
   const missingParams = differenceWith(queryKeyStrings, queryKeys, isEqual)
@@ -41,16 +43,4 @@ const getMissingParams = (queryKeyStrings, reqQuery) => {
   })
 
   return tempParams
-}
-
-/**
- * Send request with objects
- * @param {*} msgMissingParams
- * @param {*} allMissingParams
- */
-const sendRequest = (res, msgMissingParams, allMissingParams) => {
-  res.send({
-    success: false,
-    message: `${msgMissingParams} ${allMissingParams}`
-  })
 }

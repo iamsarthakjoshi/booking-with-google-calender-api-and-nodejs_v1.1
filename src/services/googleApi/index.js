@@ -1,22 +1,23 @@
-import { google } from "googleapis"
+import { google } from 'googleapis'
 
-const calendar = google.calendar("v3")
+const config = process.env
+const calendar = google.calendar('v3')
 const oAuthClient = getOAuthClient()
 
 export const getBookedEvents = (startDate, endDate) => {
   return new Promise((resolve, reject) => {
     calendar.events.list(
       {
-        calendarId: process.env.GOOGLE_CALENDAR_ID,
+        calendarId: config.GOOGLE_CALENDAR_ID,
         maxResults: 30,
-        timeMin: new Date(startDate).toISOString(),
-        timeMax: new Date(endDate).toISOString(),
+        timeMin: startDate,
+        timeMax: endDate,
         auth: oAuthClient,
         singleEvents: true,
-        orderBy: "startTime"
+        orderBy: 'startTime'
       },
       (err, response) => {
-        if (err) reject(new Error("Error fetching booked events"))
+        if (err) reject(new Error('Error fetching booked events: ' + err))
         resolve(response)
       }
     )
@@ -28,12 +29,12 @@ export const insertNewEvent = (eventResource) => {
   return new Promise((resolve, reject) => {
     calendar.events.insert(
       {
-        calendarId: "15suli79te2e0qfd533pcb8q4g@group.calendar.google.com",
+        calendarId: config.GOOGLE_CALENDAR_ID,
         auth: oAuthClient,
         resource: eventResource
       },
       (err, response) => {
-        if (err) reject(new Error("Error inserting new event"))
+        if (err) reject(new Error('Error inserting new event: ' + err))
         resolve(response)
       }
     )
@@ -42,16 +43,16 @@ export const insertNewEvent = (eventResource) => {
 
 function getOAuthClient() {
   return new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    config.GOOGLE_CLIENT_ID,
+    config.GOOGLE_CLIENT_SECRET,
+    config.GOOGLE_REDIRECT_URI
   )
 }
 
 export const getAccessToken = (code) => {
   return new Promise((resolve, reject) => {
     oAuthClient.getToken(code, (err, token) => {
-      if (err) reject(new Error("Error getting consent token"))
+      if (err) reject(new Error('Error getting consent token'))
       resolve(token)
     })
   })
@@ -59,8 +60,8 @@ export const getAccessToken = (code) => {
 
 export const getOAuthClientUrl = () => {
   return oAuthClient.generateAuthUrl({
-    access_type: "offline",
-    scope: "https://www.googleapis.com/auth/calendar"
+    access_type: 'offline',
+    scope: config.GOOGLE_CALENDAR_SCOPE
   })
 }
 

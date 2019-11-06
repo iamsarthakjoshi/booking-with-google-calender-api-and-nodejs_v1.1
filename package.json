@@ -13,7 +13,7 @@
     "moment": "^2.24.0"
   },
   "scripts": {
-    "dev": "nodemon --config nodemon.json src/index.js"
+    "dev": "TZ=utc nodemon --config nodemon.json src/index.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
