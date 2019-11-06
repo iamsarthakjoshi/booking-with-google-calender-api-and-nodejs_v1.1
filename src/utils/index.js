@@ -16,41 +16,62 @@ export const getFilteredBookedAppoinments = (items) => {
   )
 }
 
+/**
+ * Return appointment initial ISO date
+ * @param {Query String} year
+ * @param {Query String} month
+ * @param {Query String} day
+ */
 export const getStartDate = (year, month, day) => {
   return new Date(year, month - 1, day)
 }
 
+/**
+ * Return appointment final ISO date
+ * @param {Query String} year
+ * @param {Query String} month
+ * @param {Query String} day
+ */
 export const getEndDate = (year, month, day) => {
   return new Date(year, month, day)
 }
 
+/**
+ * Return ISO date-time
+ * @param {Query String} year
+ * @param {Query String} month
+ * @param {Query String} day
+ * @param {Query String} hour
+ * @param {Query String} minute
+ */
 export const getDateTime = (year, month, day, hour, minute) => {
   return new Date(year, month - 1, day, hour, minute)
 }
 
+/**
+ * Return ISO date-time with additional 40 minutes
+ * @param {*} year
+ * @param {*} month
+ * @param {*} day
+ * @param {*} hour
+ * @param {*} minute
+ */
 export const getEndDateTime = (year, month, day, hour, minute) => {
   const appointmentDuration = parseInt(process.env.APPOINTMENT_DURATION)
   const tempDate = new Date(year, month - 1, day, hour, minute)
+  // Add 40 mins duration
   tempDate.setMinutes(tempDate.getMinutes() + appointmentDuration)
   return tempDate
 }
 
 /**
- * Format full iso date-time to only date, for eg:
- * formatted date would be 2019-10-16
+ * Re-Format iso date-time to ISO 8601
  * @param {Date} dateTime
  */
-export const formatFullDateTime = (dateTime) =>
-  moment(dateTime).format('YYYY-MM-DD')
-
-export const hasDatesMatched = (d1, d2) => {
-  return moment(formatFullDateTime(d1).isSame(formatFullDateTime(d2)))
-}
-
 export const formatToISO = (dateTime) => new Date(dateTime)
 
 /**
- *
+ * Modifiy given date with provided time string
  * @param {Date} dateTime
  * @param {Time String} timeString
  */
@@ -66,3 +87,9 @@ export const getModifiedDate = (dateTime, timeString) => {
     })
     .toDate()
 }
+
+/**
+ * Return date in YYYY-MM-DD format
+ * @param {Date} date
+ */
+export const getFormattedDate = (date) => moment(date).format('YYYY-MM-DD')

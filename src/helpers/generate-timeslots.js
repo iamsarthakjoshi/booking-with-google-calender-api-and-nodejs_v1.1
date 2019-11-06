@@ -4,7 +4,11 @@ const config = process.env
 const appointmentDuration = config.APPOINTMENT_DURATION
 const appointmentInterval = config.APPOINTMENT_INTERVAL
 
-// Dynamically generate desired time slots
+/**
+ * Dynamically generate desired time slots
+ * @param {Date} date
+ * @returns {Array}
+ */
 export const generateTimeSlots = (date) => {
   let timeSlots = []
   const startTime = moment(config.START_TIME, config.TIME_FORMAT)
@@ -32,7 +36,10 @@ export const generateTimeSlots = (date) => {
   return timeSlots
 }
 
-// Count total number of bookable time slots
+/**
+ * Count total number of bookable time slots
+ * @returns {Int16Array}
+ */
 export const getTotalTimeSlots = () => {
   let count = 0
   const startTime = moment(config.START_TIME, config.TIME_FORMAT)

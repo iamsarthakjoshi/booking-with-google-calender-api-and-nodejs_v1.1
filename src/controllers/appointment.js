@@ -5,10 +5,17 @@ import {
   makeNewAppointment
 } from 'services/calendar'
 
+/**
+ *
+ * @param {HTTP} req
+ * @param {HTTP} res
+ * @returns {Response}
+ */
 export const getMonthlyTimeSlotsStatus = async (req, res) => {
   const {
     query: { year, month }
-  } = req
+  } = req /* Year and month requested by the user */
+
   const startDate = getStartDate(year, month, 1)
   const endDate = getEndDate(year, month, 0)
 
@@ -20,8 +27,9 @@ export const getMonthlyTimeSlotsStatus = async (req, res) => {
 export const getTimeSlotsForGivenDay = async (req, res) => {
   const {
     query: { year, month, day }
-  } = req // date-time requested by the user
-  // set time between every hours in 24 hr
+  } = req /* date-time requested by the user */
+
+  /* Set time between every hours in 24 hour */
   const startTime = getDateTime(year, month, day, 0, 0)
   const endTime = getDateTime(year, month, day, 23, 59)
 
@@ -33,7 +41,8 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
 export const bookNewAppointment = async (req, res) => {
   let {
     query: { year, month, day, hour, minute }
-  } = req // booking date-time requested by the user
+  } = req /* Booking date-time requested by the user */
+
   const startTime = getDateTime(year, month, day, hour, minute)
   const endTime = getEndDateTime(year, month, day, hour, minute)
 
