@@ -8,15 +8,13 @@ const customLevels = {
     error: 0,
     warn: 1,
     info: 2,
-    verbose: 3,
     debug: 4
   },
   colors: {
     error: 'red',
     info: 'cyan',
     warn: 'yellow',
-    debug: 'green',
-    verbose: 'white'
+    debug: 'purple'
   }
 }
 
@@ -30,26 +28,21 @@ class Logger {
   constructor() {
     const fileTransport = new transports.File({
       maxFiles: 5,
-      maxsize: 5120,
+      maxsize: 5120000,
       filename: `${__dirname}/../logs/logs.log`,
-      level: 'warn',
+      level: 'warn' /* logs error and warn  */,
       format: json()
     })
     const consoleTransport = new transports.Console({
-      level: 'info',
-      format: colorize()
+      level: 'info' /* displays all levels of logs */
     })
     this.logger = createLogger({
       format: mainLogFormat,
-      level: isProduction ? 'info' : 'trace',
+      level: isProduction ? 'info' : 'debug',
       levels: customLevels.levels,
       transports: [fileTransport, consoleTransport]
     })
     addColors(customLevels.colors)
-  }
-
-  trace(msg, meta) {
-    this.logger.log('trace', msg, meta)
   }
 
   debug(msg, meta) {
