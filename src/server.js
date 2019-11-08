@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 
 import routes from 'routes'
-import logger from 'utils/logger'
+import logger from 'common/logger'
 
 const app = express()
 const PORT = process.env.PORT

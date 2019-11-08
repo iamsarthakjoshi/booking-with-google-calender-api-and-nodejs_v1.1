@@ -70,7 +70,7 @@ const parser = (data) => {
   if (typeof data === 'string') {
     return data
   }
-  return Object.keys(data).length ? JSON.stringify(data, null, 2) : ''
+  return Object.keys(data).length ? JSON.stringify(data) : ''
 }
 
 /* Log format for Console and File Logs */

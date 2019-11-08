@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { getModifiedDate } from 'utils'
+import { getModifiedDate } from 'common/utils'
 import { throwError } from 'handler/error-handler'
 import { getAvailableTimeSlots } from 'helpers/timeslots-impl'
 

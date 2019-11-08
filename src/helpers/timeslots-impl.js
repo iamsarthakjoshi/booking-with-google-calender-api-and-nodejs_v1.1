@@ -1,6 +1,6 @@
 import { isEqual, differenceWith } from 'loadsh'
 
-import { getFilteredBookedAppoinments, formatToISO } from 'utils'
+import { getFilteredBookedAppoinments, formatToISO } from 'common/utils'
 import { getBookedEvents } from 'services/googleApi'
 import { generateTimeSlots } from 'helpers/generate-timeslots'
 

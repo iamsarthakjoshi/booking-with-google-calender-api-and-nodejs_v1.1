@@ -1,7 +1,13 @@
 import { isEmpty } from 'loadsh'
 
+import logger from 'common/logger'
 import { sendSuccess, sendError } from 'handler/response-handler'
-import { getStartDate, getEndDate, getDateTime, getEndDateTime } from 'utils'
+import {
+  getStartDate,
+  getEndDate,
+  getDateTime,
+  getEndDateTime
+} from 'common/utils'
 import {
   makeMonthlyTimeSlotsStatus,
   makeTimeSlotsForGivenDay,
@@ -14,6 +20,8 @@ import {
  * @param {Response} res
  */
 export const getMonthlyTimeSlotsStatus = async (req, res) => {
+  logger.info('Serving /days request', req.query)
+
   try {
     const {
       query: { year, month }
@@ -26,7 +34,9 @@ export const getMonthlyTimeSlotsStatus = async (req, res) => {
 
     sendSuccess(res, 'days')({ days: days })
   } catch (error) {
-    sendError(res, error.code, error.message)(error)
+    console.log(error)
+    logger.error(error.message, { stacktrace: error.stack })
+    sendError(res, error.code, error.message)()
   }
 }
 
@@ -36,6 +46,8 @@ export const getMonthlyTimeSlotsStatus = async (req, res) => {
  * @param {Response} res
  */
 export const getTimeSlotsForGivenDay = async (req, res) => {
+  logger.info('Serving /timeslots request with', req.query)
+
   try {
     const {
       query: { year, month, day }
@@ -55,7 +67,8 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
         : { timeSlots: timeSlots }
     )
   } catch (error) {
-    sendError(res, error.code, error.message)(error)
+    logger.error(error.message, { stacktrace: error.stack })
+    sendError(res, error.code, error.message)()
   }
 }
 
@@ -66,6 +79,8 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
  * @param {Response} res
  */
 export const bookNewAppointment = async (req, res) => {
+  logger.info('Serving /book request with', req.query)
+
   try {
     let {
       query: { year, month, day, hour, minute }
@@ -77,6 +92,7 @@ export const bookNewAppointment = async (req, res) => {
     const bookedTimeSlot = await makeNewAppointment(startTime, endTime)
     sendSuccessForBooking(res, 'booking')(bookedTimeSlot)
   } catch (error) {
+    logger.error(error.message, { stacktrace: error.stack })
     sendError(res, error.code, error.message)()
   }
 }
