@@ -2,7 +2,7 @@ import express from 'express'
 
 import { checkLogin } from 'middlewares/checkLogin'
 import { checkQueryParams } from 'middlewares/checkQueryParams'
-import { handleCallBacks } from 'middlewares/handleOAuthCallbacks'
+import { handleCallBacks } from 'middlewares/redirectOAuthCallbacks'
 import {
   getMonthlyTimeSlotsStatus,
   getTimeSlotsForGivenDay,

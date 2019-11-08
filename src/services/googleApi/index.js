@@ -16,8 +16,8 @@ export const getBookedEvents = (startDate, endDate) => {
         singleEvents: true,
         orderBy: 'startTime'
       },
-      (err, response) => {
-        if (err) reject(new Error('Error fetching booked events: ' + err))
+      (error, response) => {
+        if (error) reject(new Error(error))
         resolve(response)
       }
     )
@@ -33,8 +33,8 @@ export const insertNewEvent = (eventResource) => {
         auth: oAuthClient,
         resource: eventResource
       },
-      (err, response) => {
-        if (err) reject(new Error('Error inserting new event: ' + err))
+      (error, response) => {
+        if (err) reject(new Error(error))
         resolve(response)
       }
     )

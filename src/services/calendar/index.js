@@ -1,16 +1,12 @@
 import moment from 'moment'
-import { isEqual, isUndefined, differenceWith, countBy } from 'loadsh'
+import { isUndefined, countBy } from 'loadsh'
 
-import { getFilteredBookedAppoinments, formatToISO } from 'utils'
+import { getFilteredBookedAppoinments } from 'utils'
 import { getBookedEvents, insertNewEvent } from 'services/googleApi'
-import { getModifiedDate } from 'utils'
-import {
-  getTotalTimeSlots,
-  generateTimeSlots
-} from 'helpers/generate-timeslots'
-
-/* Instantiate environment variable */
-const config = process.env
+import { isBookingTimeValid } from 'helpers/booking-validation'
+import { checkWeekends, isWeekends } from 'helpers/date-time-validation'
+import { getTotalTimeSlots } from 'helpers/generate-timeslots'
+import { getAvailableTimeSlots } from 'helpers/timeslots-impl'
 
 /**
  *
@@ -19,18 +15,14 @@ const config = process.env
  * @returns {Array}
  */
 export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
+  console.log(startDate, endDate)
   const {
     data: { items }
   } = await getBookedEvents(startDate, endDate)
 
   const bookedEventsForEachDay = getBookedEventsForEachDay(items)
 
-  const timeSlotsStatus = getTimeSlotStatus(
-    bookedEventsForEachDay,
-    startDate,
-    endDate
-  )
-  return timeSlotsStatus
+  return getTimeSlotStatus(bookedEventsForEachDay, startDate, endDate)
 }
 
 /**
@@ -40,6 +32,7 @@ export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
  * @returns {Array}
  */
 export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
+  checkWeekends(startTime, endTime)
   return await getAvailableTimeSlots(startTime, endTime)
 }
 
@@ -50,79 +43,20 @@ export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
  * @returns {Object}
  */
 export const makeNewAppointment = async (startTime, endTime) => {
-  let message = ''
-  let isBooked = false
-
-  const apptStartTime = moment(config.START_TIME, config.TIME_FORMAT)
-  const apptEndTime = moment(config.START_TIME, config.TIME_FORMAT)
-
-  const isValidTimeSlot = isGivenTimeValid(startTime)
-
-  /* check every given conditions and set corresponding error messages */
-  if (moment(startTime).weekday() === 0 || moment(startTime).weekday() === 6) {
-    message = 'Cannot book time during the weekends'
-  } else if (moment(startTime).isBefore(moment())) {
-    message = 'Cannot book time in the past'
-  } else if (moment.duration(moment(startTime).diff(moment())).asHours() < 24) {
-    message = 'Cannot book with less than 24 hours in advance'
-  } else if (
-    !moment(startTime).isBetween(apptStartTime, apptEndTime, 'hours', '[]')
-  ) {
-    message = 'Cannot book outside bookable timeframe'
-  } else if (!isValidTimeSlot) {
-    message = 'Invalid time slot'
-  } else {
-    /* Set data for new appointment */
-    var resource = {
+  return await isBookingTimeValid(startTime).then((response) => {
+    let resource = {
+      /* Set data for new appointment */
       summary: `Eight Appoinment`,
-      location: `0/12 Prospect Road, Summer Hill, NSW 2130, Australia`,
+      location: `Location`,
       start: { dateTime: startTime },
       end: { dateTime: endTime },
       description: `Appointment Booked`
     }
 
     /* Call google calendar insert api */
-    let insert = await insertNewEvent(resource)
-    if (insert.status === 200) isBooked = true
-  }
-
-  return {
-    status: isBooked ? true : false,
-    result: isBooked ? availableTimeSlots : message
-  }
-}
-
-/**
- * Get diff. btwn. Fixed Time Slots and Booked Appointments
- * and return array object
- * @param {Date} startTime
- * @param {Date} endTime
- * @returns {Array}
- */
-const getAvailableTimeSlots = async (startTime, endTime) => {
-  const {
-    data: { items }
-  } = await getBookedEvents(startTime, endTime)
-
-  const bookedApps = getBookedAppointmentDateTime(items)
-  const fixedTimeSlots = generateTimeSlots(startTime)
-  const availableTimeSlots = differenceWith(fixedTimeSlots, bookedApps, isEqual)
-
-  return availableTimeSlots
-}
-
-/**
- * Extract start and end time of booked appointments
- * and return them as an array object.
- * @param {*} items
- * @returns {Array}
- */
-const getBookedAppointmentDateTime = (items) => {
-  const filteredApps = getFilteredBookedAppoinments(items)
-  return filteredApps.map(({ start, end }) => ({
-    start: formatToISO(start.dateTime),
-    end: formatToISO(end.dateTime)
-  }))
+    let insert = insertNewEvent(resource)
+    if (insert.status === 200) return { startTime: startTime, endTime: endTime }
+  })
 }
 
 /**
@@ -134,9 +68,8 @@ const getBookedEventsForEachDay = (items) => {
   const bookedEventsForEachDay = filteredBookedAppoinments.map(
     (appointment, i) => moment(appointment.start.dateTime).date()
   )
-  // count no of booked events for each day
-  const noOfBookedEvents = countBy(bookedEventsForEachDay)
-  return noOfBookedEvents
+  /* Count and return no of booked events for each day */
+  return countBy(bookedEventsForEachDay)
 }
 
 /**
@@ -154,8 +87,7 @@ const getTimeSlotStatus = (bookedEventsForEachDay, startDate, endDate) => {
     if (
       (bookedEventsForEachDay[i] < timeSlotsCount ||
         isUndefined(bookedEventsForEachDay[i])) &&
-      (moment(startDate).weekday() !== 0 && // TODO: FIX it
-        moment(startDate).weekday() !== 6)
+      !isWeekends()
     ) {
       status.push({ day: i, hasTimeSlots: true })
     } else {
@@ -164,24 +96,4 @@ const getTimeSlotStatus = (bookedEventsForEachDay, startDate, endDate) => {
     startDate.setDate(startDate.getDate() + 1)
   }
   return status
-}
-
-/**
- * Check if requested time mataches with available
- * time slots
- * @param {Date} dateTime
- * @returns {Boolean}
- */
-const isGivenTimeValid = async (dateTime) => {
-  /* Modify given date to make comparison for 'isBetween'*/
-  const startOfTheDay = getModifiedDate(dateTime, config.START_OF_DAY)
-  const endOfTheDay = getModifiedDate(dateTime, config.END_OF_DAY)
-
-  const availableTimeSlots = await getAvailableTimeSlots(
-    startOfTheDay,
-    endOfTheDay
-  )
-
-  /* Check if requested time is available */
-  return availableTimeSlots.some((ts) => moment(ts.start).isSame(dateTime))
 }

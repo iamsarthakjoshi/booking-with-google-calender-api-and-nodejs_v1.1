@@ -1,5 +1,7 @@
 import moment from 'moment'
 
+import { validateDateTime } from 'helpers/date-time-validation'
+
 /**
  *  Filter events by excluding weekdays and time before
  *  9AM and after 6PM
@@ -23,6 +25,7 @@ export const getFilteredBookedAppoinments = (items) => {
  * @param {Query String} day
  */
 export const getStartDate = (year, month, day) => {
+  validateDateTime(month, day)
   return new Date(year, month - 1, day)
 }
 
@@ -33,6 +36,7 @@ export const getStartDate = (year, month, day) => {
  * @param {Query String} day
  */
 export const getEndDate = (year, month, day) => {
+  validateDateTime(month, day)
   return new Date(year, month, day)
 }
 
@@ -45,6 +49,7 @@ export const getEndDate = (year, month, day) => {
  * @param {Query String} minute
  */
 export const getDateTime = (year, month, day, hour, minute) => {
+  validateDateTime(month, day, hour, minute)
   return new Date(year, month - 1, day, hour, minute)
 }
 
@@ -57,9 +62,10 @@ export const getDateTime = (year, month, day, hour, minute) => {
  * @param {*} minute
  */
 export const getEndDateTime = (year, month, day, hour, minute) => {
+  validateDateTime(month, day, hour, minute)
   const appointmentDuration = parseInt(process.env.APPOINTMENT_DURATION)
   const tempDate = new Date(year, month - 1, day, hour, minute)
-  // Add 40 mins duration
+  /* Add 40 mins duration */
   tempDate.setMinutes(tempDate.getMinutes() + appointmentDuration)
   return tempDate
 }
@@ -74,6 +80,7 @@ export const formatToISO = (dateTime) => new Date(dateTime)
  * Modifiy given date with provided time string
  * @param {Date} dateTime
  * @param {Time String} timeString
+ * @returns {moment}
  */
 export const getModifiedDate = (dateTime, timeString) => {
   const config = process.env

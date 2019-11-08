@@ -1,7 +1,7 @@
 {
   "name": "bookingapp",
   "version": "0.1",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -10,11 +10,12 @@
     "express": "^4.17.1",
     "googleapis": "^44.0.0",
     "loadsh": "^0.0.4",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "winston": "^3.2.1"
   },
   "scripts": {
-    "start": "TZ=utc nodemon --config nodemon.json src/index.js",
-    "dev": "TZ=utc nodemon --config nodemon.json src/index.js"
+    "start": "TZ=utc nodemon --config nodemon.json src/server.js",
+    "dev": "TZ=utc nodemon --config nodemon.json src/server.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
