@@ -21,8 +21,7 @@ export const checkWeekends = (dateTime) => {
  * @param {Date} dateTime
  */
 export const isWeekends = (dateTime) => {
-  if (moment(dateTime).weekday() === 0 || moment(dateTime).weekday() === 6)
-    return true
+  return moment(dateTime).weekday() === 0 || moment(dateTime).weekday() === 6
 }
 
 /**

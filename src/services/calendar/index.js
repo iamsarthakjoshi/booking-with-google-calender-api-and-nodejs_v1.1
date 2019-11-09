@@ -5,7 +5,7 @@ import logger from 'common/logger'
 import { getFilteredBookedAppoinments } from 'common/utils'
 import { getBookedEvents, insertNewEvent } from 'services/googleApi'
 import { isBookingTimeValid } from 'helpers/booking-validation'
-import { checkWeekends, isWeekends } from 'helpers/date-time-validation'
+import { checkWeekends } from 'helpers/date-time-validation'
 import { getTotalTimeSlots } from 'helpers/generate-timeslots'
 import { getAvailableTimeSlots } from 'helpers/timeslots-impl'
 
@@ -102,7 +102,7 @@ const getTimeSlotStatus = (bookedEventsForEachDay, startDate, endDate) => {
     if (
       (bookedEventsForEachDay[i] < timeSlotsCount ||
         isUndefined(bookedEventsForEachDay[i])) &&
-      !isWeekends()
+      (moment(startDate).weekday() !== 0 && moment(startDate).weekday() !== 6)
     ) {
       status.push({ day: i, hasTimeSlots: true })
     } else {
