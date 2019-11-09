@@ -5,10 +5,9 @@
  * @param {Request Type} reqType
  */
 export const sendSuccess = (res, reqType) => (data) => {
-  let { days, timeSlots, message, startTime, endTime } = data
+  let { timeSlots, message, startTime, endTime } = data
 
-  if (reqType === 'days') res.status(200).json({ success: true, days })
-  else if (reqType === 'timeSlots')
+  if (reqType === 'timeSlots')
     res.status(200).json({ success: true, timeSlots, message })
   else if (reqType === 'booking')
     res.status(200).json({ success: true, startTime, endTime })

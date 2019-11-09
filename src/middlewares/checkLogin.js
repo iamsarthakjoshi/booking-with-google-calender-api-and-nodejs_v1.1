@@ -20,15 +20,14 @@ export const checkLogin = (req, res, next) => {
   originalRequestedUrl = originalUrl
   const token = cookieGoogleAccessToken
 
-  logger.info('Token Cookie', { token })
-  logger.info(`Token Expired: ${isTokenExpired(token)}`)
-
   /**
    * Check cookie containing tooken, Also
    * if Token is expired if cookie exist
    */
   if (!token || (token && isTokenExpired(token))) {
-    logger.warn('Cookie Token Not Found || Token Expired')
+    logger.warn('Cookie Token Not Found || Token Expired', {
+      isTokenExpired: isTokenExpired(token)
+    })
     res.redirect(getOAuthClientUrl())
     return
   }

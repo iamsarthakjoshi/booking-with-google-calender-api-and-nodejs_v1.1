@@ -32,9 +32,9 @@ export const getMonthlyTimeSlotsStatus = async (req, res) => {
 
     const days = await makeMonthlyTimeSlotsStatus(startDate, endDate)
 
+    logger.info('Timeslots status for each day are fetched!')
     sendSuccess(res, 'days')({ days: days })
   } catch (error) {
-    console.log(error)
     logger.error(error.message, { stacktrace: error.stack })
     sendError(res, error.code, error.message)()
   }
@@ -58,6 +58,7 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
     const endTime = getDateTime(year, month, day, 23, 59)
 
     const timeSlots = await makeTimeSlotsForGivenDay(startTime, endTime)
+    logger.info('Timeslots are fetched!')
     sendSuccess(res, 'timeSlots')(
       isEmpty(timeSlots)
         ? {
@@ -90,7 +91,9 @@ export const bookNewAppointment = async (req, res) => {
     const endTime = getEndDateTime(year, month, day, hour, minute)
 
     const bookedTimeSlot = await makeNewAppointment(startTime, endTime)
-    sendSuccessForBooking(res, 'booking')(bookedTimeSlot)
+
+    logger.info('Appointment booked!', bookedTimeSlot)
+    sendSuccess(res, 'booking')(bookedTimeSlot)
   } catch (error) {
     logger.error(error.message, { stacktrace: error.stack })
     sendError(res, error.code, error.message)()

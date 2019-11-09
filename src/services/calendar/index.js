@@ -13,7 +13,7 @@ import { getAvailableTimeSlots } from 'helpers/timeslots-impl'
  *
  * @param {Date} startDate
  * @param {Date} endDate
- * @returns {Array}
+ * @returns {array}
  */
 export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
   logger.info('Making time slots for each day for requested month', {
@@ -58,7 +58,13 @@ export const makeNewAppointment = async (startTime, endTime) => {
     endTime: endTime
   })
 
-  return await isBookingTimeValid(startTime).then((response) => {
+  const bookingTimeValid = await isBookingTimeValid(startTime)
+
+  /**
+   * Book new appointment if requested date is
+   * available and valid
+   */
+  if (bookingTimeValid) {
     let resource = {
       /* Set data for new appointment */
       summary: `Eight Appoinment`,
@@ -69,14 +75,14 @@ export const makeNewAppointment = async (startTime, endTime) => {
     }
 
     /* Call google calendar insert api */
-    let insert = insertNewEvent(resource)
+    let insert = await insertNewEvent(resource)
     if (insert.status === 200) return { startTime: startTime, endTime: endTime }
-  })
+  }
 }
 
 /**
  * Get no. of booked events for each daily on a monthly basis.
- * @param {*} items
+ * @param {Google Calender Events} items
  */
 const getBookedEventsForEachDay = (items) => {
   const filteredBookedAppoinments = getFilteredBookedAppoinments(items)
@@ -89,9 +95,9 @@ const getBookedEventsForEachDay = (items) => {
 
 /**
  * Get timeslot avaibility for each day of given MM and YYYY.
- * @param {*} bookedEventsForEachDay
- * @param {*} totalNoOfDays
- * @returns {Array}
+ * @param {array} bookedEventsForEachDay
+ * @param {integer} totalNoOfDays
+ * @returns {array}
  */
 const getTimeSlotStatus = (bookedEventsForEachDay, startDate, endDate) => {
   const status = []

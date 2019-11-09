@@ -18,49 +18,25 @@ export const getFilteredBookedAppoinments = (items) => {
   )
 }
 
-/**
- * Return appointment initial ISO date
- * @param {Query String} year
- * @param {Query String} month
- * @param {Query String} day
- */
+/* Return appointment initial ISO date */
 export const getStartDate = (year, month, day) => {
   validateDateTime(month, day)
   return new Date(year, month - 1, day)
 }
 
-/**
- * Return appointment final ISO date
- * @param {Query String} year
- * @param {Query String} month
- * @param {Query String} day
- */
+/* Return appointment final ISO date */
 export const getEndDate = (year, month, day) => {
   validateDateTime(month, day)
   return new Date(year, month, day)
 }
 
-/**
- * Return ISO date-time
- * @param {Query String} year
- * @param {Query String} month
- * @param {Query String} day
- * @param {Query String} hour
- * @param {Query String} minute
- */
+/* Return ISO date-time */
 export const getDateTime = (year, month, day, hour, minute) => {
   validateDateTime(month, day, hour, minute)
   return new Date(year, month - 1, day, hour, minute)
 }
 
-/**
- * Return ISO date-time with additional 40 minutes
- * @param {*} year
- * @param {*} month
- * @param {*} day
- * @param {*} hour
- * @param {*} minute
- */
+/* Return ISO date-time with additional 40 minutes */
 export const getEndDateTime = (year, month, day, hour, minute) => {
   validateDateTime(month, day, hour, minute)
   const appointmentDuration = parseInt(process.env.APPOINTMENT_DURATION)
@@ -79,7 +55,7 @@ export const formatToISO = (dateTime) => new Date(dateTime)
 /**
  * Modifiy given date with provided time string
  * @param {Date} dateTime
- * @param {Time String} timeString
+ * @param {string} timeString
  * @returns {moment}
  */
 export const getModifiedDate = (dateTime, timeString) => {

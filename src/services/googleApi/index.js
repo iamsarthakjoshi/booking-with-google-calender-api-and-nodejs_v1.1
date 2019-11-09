@@ -43,7 +43,7 @@ export const insertNewEvent = (eventResource) => {
         resource: eventResource
       },
       (error, response) => {
-        if (err) reject(new Error(error))
+        if (error) reject(new Error(error))
         resolve(response)
       }
     )
