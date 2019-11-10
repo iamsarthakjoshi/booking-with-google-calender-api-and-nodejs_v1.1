@@ -53,7 +53,9 @@ function () {
             _ref2 = _context.sent;
             items = _ref2.data.items;
             bookedEventsForEachDay = getBookedEventsForEachDay(items);
-            (0, _dateTimeValidation.validateWeekendsAndPast)(startDate);
+            /* Check if requested date time fall on Past date time */
+
+            (0, _dateTimeValidation.validatePastDateTime)(endDate);
             return _context.abrupt("return", getTimeSlotStatus(bookedEventsForEachDay, startDate, endDate));
 
           case 8:
@@ -92,15 +94,20 @@ function () {
               startTime: startTime,
               endTime: endTime
             });
+            /* Check if requested date time fall on Past date time */
 
-            (0, _dateTimeValidation.validateWeekendsAndPast)(startTime);
-            _context2.next = 4;
+
+            (0, _dateTimeValidation.validatePastDateTime)(startTime);
+            /* Check if requested date time fall on weekends */
+
+            (0, _dateTimeValidation.validateWeekends)(startTime);
+            _context2.next = 5;
             return (0, _timeslotsImpl.getAvailableTimeSlots)(startTime, endTime);
 
-          case 4:
+          case 5:
             return _context2.abrupt("return", _context2.sent);
 
-          case 5:
+          case 6:
           case "end":
             return _context2.stop();
         }

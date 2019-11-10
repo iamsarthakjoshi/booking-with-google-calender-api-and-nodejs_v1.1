@@ -5,14 +5,26 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.validateDateTime = exports.isWeekends = exports.validateWeekendsAndPast = void 0;
+exports.validateDateTime = exports.isWeekends = exports.validatePastDateTime = exports.validateWeekends = void 0;
 
 var _moment = _interopRequireDefault(require("moment"));
 
 var _errorHandler = require("../handler/error-handler");
 
-var validateWeekendsAndPast = function validateWeekendsAndPast(dateTime) {
+var validateWeekends = function validateWeekends(dateTime) {
   if (isWeekends(dateTime)) (0, _errorHandler.throwError)(501, 'DateTime Error', 'Appointments can only be booked during weekdays')();
+};
+/**
+ * Check if given date falls on past date and time
+ * and throw error if it does
+ * @param {Date} dateTime
+ */
+
+
+exports.validateWeekends = validateWeekends;
+
+var validatePastDateTime = function validatePastDateTime(dateTime) {
+  console.log((0, _moment["default"])(dateTime).toDate(), (0, _moment["default"])().toDate());
 
   if ((0, _moment["default"])(dateTime).isBefore((0, _moment["default"])())) {
     (0, _errorHandler.throwError)(501, 'DateTime Error', 'No time slots available for past')();
@@ -24,7 +36,7 @@ var validateWeekendsAndPast = function validateWeekendsAndPast(dateTime) {
  */
 
 
-exports.validateWeekendsAndPast = validateWeekendsAndPast;
+exports.validatePastDateTime = validatePastDateTime;
 
 var isWeekends = function isWeekends(dateTime) {
   return (0, _moment["default"])(dateTime).weekday() === 0 || (0, _moment["default"])(dateTime).weekday() === 6;
