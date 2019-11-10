@@ -30,16 +30,16 @@ then change the name of .env.sample file to .env using below command (for linux 
 #### Google Cloud Platform end-point URLs
 The server is hosted on Google Cloud Platform. Due to the it's limitations, I was not able to implement __winston__ logger here, but it's enabled for local or other uses.
 
-__Days__ 
-https://quickstart-1569289058700.appspot.com/days?year=YYYY&month=MM
+## __Days__ 
+> https://quickstart-1569289058700.appspot.com/days?year=YYYY&month=MM
 ``` eg: https://quickstart-1569289058700.appspot.com/days?year=2019&month=11 ```
 
-__Timeslots__ 
-https://quickstart-1569289058700.appspot.com/timeslots?year=YYYY&month=MM&day=DD
+## __Timeslots__ 
+> https://quickstart-1569289058700.appspot.com/timeslots?year=YYYY&month=MM&day=DD
 ``` eg: https://quickstart-1569289058700.appspot.com/timeslots?year=2019&month=11&day=29 ```
 
-__Booking__ 
-https://quickstart-1569289058700.appspot.com/book?year=YYYY&month=MM&day=DD&hour=HH&minute=MM
+## __Booking__ 
+> https://quickstart-1569289058700.appspot.com/book?year=YYYY&month=MM&day=DD&hour=HH&minute=MM
 ``` eg: https://quickstart-1569289058700.appspot.com/book?year=2019&month=11&day=29&hour=14&minute=15 ```
 
 #### About the looger
