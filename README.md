@@ -1,22 +1,46 @@
 ## Appointment Scheduling Nodes.js Backend
 Appointment Scheduling with Google Calender API and Node JS
 
-#### Demo:
-> https://drive.google.com/open?id=1uOs53fzj0K4JadflYu-HjRHHpGLevwiK
+#### Change Configurations in __.env.sample__ file (Important step!!!)
+First off, please configure Google Calender API credentials, Port no. inside .env.sample file
+then change the name of .env.sample file to .env using below command (for linux and unix)
+> mv .env.sample .env
 
-#### Install Dependencies:
-> npm install
+#### Points to be noted (Other Important Instructions)
+- As per the requirement, I have tested the app features in UTC timezone.
+- __Please do not forget to put your Google Calender's timezone to UTC.__
+- Every time you start the app, the time zone is set to UTC.
+   For example, as you can see below, start script from package.json file 
+``` "start": "TZ=utc node -r dotenv/config dist/server.js" ```
+- DO NOT forget to make your Google Calender publicly accessable if you want to use other gmail-id to access the calender. You can easily change this under your Calender Setting Options.
+- You have to allow every access to google oauth consent to make booking and fetching timeslots.
 
-#### Start server:
-> npm start
+#### Install Dependencies: (I prefer Yarn personally)
+> yarn install
 
-#### Change Google Calender API Credentials in __.env__ file
-> .env
+#### Start server in Production mode:
+> yarn start
 
-#### Port Used, change in __.env__ file
-> port used currently: 8081
+#### Start server in Development mode with nodemon:
+> yarn dev
 
-### Requirements:
+#### Make app production ready:
+> yarn build && yarn serve
+
+#### Google Cloud Platform end-point URLs
+The server is hosted on Google Cloud Platform. Due to the it's limitations, I was not able to implement __winston__ logger here, but it's enabled for local or other uses.
+
+> __Days__ https://quickstart-1569289058700.appspot.com/days?year=__yyyy__&month=__mm__
+> __Timeslots__ https://quickstart-1569289058700.appspot.com/timeslots?year=__yyyyy__&month=__mm__&day=__dd__
+> __Booking__ https://quickstart-1569289058700.appspot.com/book?year=__yyyyy__&month=__mm__&day=__dd__&hour=__hh__&minute=__mm__
+
+#### About the looger
+- Only error and earn level of logs are logged in file called logs.log, however, all level of logs are can be traced at console.
+
+#### Thank you! :)
+
+
+### Given Requirements:
 
 - All appointments are __40 minutes__ long and have __fixed times__, starting from 9–9:40 am
 - Ensure there is always a __5 minutes break__ in between each appointment
