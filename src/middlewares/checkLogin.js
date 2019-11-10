@@ -25,9 +25,7 @@ export const checkLogin = (req, res, next) => {
    * if Token is expired if cookie exist
    */
   if (!token || (token && isTokenExpired(token))) {
-    logger.warn('Cookie Token Not Found || Token Expired', {
-      isTokenExpired: isTokenExpired(token)
-    })
+    logger.warn('Cookie Token Not Found || Token Expired')
     res.redirect(getOAuthClientUrl())
     return
   }
