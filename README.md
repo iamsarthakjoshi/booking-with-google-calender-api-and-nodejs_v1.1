@@ -34,7 +34,8 @@ GOOGLE_CALENDAR_ID = 15suli79te2e0qfd53sdddd8q4g@group.calendar.google.com
 __Please leave other configuration as it is!__
 
 #### For you own GCP, OAuth and Calendar API (OAuth Approach)
-> For __Authorized redirect URIs__, we use combination of __GOOGLE_REDIRECT_URI + GOOGLE_REDIRECT_END_POINT__ (from the .env file), that would be, for example,
+
+For __Authorized redirect URIs__, we use combination of __GOOGLE_REDIRECT_URI + GOOGLE_REDIRECT_END_POINT__ (from the .env file), that would be, for example,
 
 ``` 	https://quickstart-1569289058700.appspot.com/oauth/callback ```
 
