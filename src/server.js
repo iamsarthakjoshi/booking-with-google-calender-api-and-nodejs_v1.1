@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
-  logger.error(error.message, { stacktrace: error.stack })
+  //logger.error(error.message, { stacktrace: error.stack })
   res.status(error.status || 500)
   res.send({
     error: {
@@ -30,4 +30,4 @@ app.use((error, req, res, next) => {
   })
 })
 
-app.listen(PORT, () => logger.info(`Server listening on PORT: ${PORT}`))
+app.listen(PORT, () => console.log(`Server listening on PORT: ${PORT}`))

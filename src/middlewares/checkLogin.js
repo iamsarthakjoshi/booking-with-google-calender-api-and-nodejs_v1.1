@@ -10,7 +10,7 @@ let originalRequestedUrl
  * @param {next} next
  */
 export const checkLogin = (req, res, next) => {
-  logger.info('Authenticating User Token')
+  //logger.info('Authenticating User Token')
 
   const {
     cookies: { cookieGoogleAccessToken },
@@ -25,9 +25,7 @@ export const checkLogin = (req, res, next) => {
    * if Token is expired if cookie exist
    */
   if (!token || (token && isTokenExpired(token))) {
-    logger.warn('Cookie Token Not Found || Token Expired', {
-      isTokenExpired: isTokenExpired(token)
-    })
+    //logger.warn('Cookie Token Not Found || Token Expired', {isTokenExpired: isTokenExpired(token)})
     res.redirect(getOAuthClientUrl())
     return
   }
