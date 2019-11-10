@@ -14,17 +14,15 @@
     "loadsh": "^0.0.4",
     "moment": "^2.24.0",
     "winston": "^3.2.1",
-    "nodemon": "^1.19.4"
-  },
-  "scripts": {
-    "start": "TZ=utc nodemon --config nodemon.json src/server.js",
-    "dev": "TZ=utc nodemon --config nodemon.json src/server.js"
-  },
-  "devDependencies": {
+    "nodemon": "^1.19.4",
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
     "@babel/node": "^7.2.2",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.1.6"
+  },
+  "scripts": {
+    "start": "TZ=utc nodemon --config nodemon.json src/server.js",
+    "dev": "TZ=utc nodemon --config nodemon.json src/server.js"
   }
 }
