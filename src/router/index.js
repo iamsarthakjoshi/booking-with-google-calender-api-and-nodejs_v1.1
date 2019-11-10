@@ -10,6 +10,7 @@ import {
 } from 'controllers/appointment'
 
 const router = express.Router()
+const redirectEndPoint = process.env.GOOGLE_REDIRECT_END_POINT // OAuth Redirect End-Point
 
 router.get('/days', checkLogin, checkQueryParams, getMonthlyTimeSlotsStatus)
 
@@ -17,6 +18,6 @@ router.get('/timeslots', checkLogin, checkQueryParams, getTimeSlotsForGivenDay)
 
 router.get('/book', checkLogin, checkQueryParams, bookNewAppointment)
 
-router.get('/oauth/callback', handleCallBacks)
+router.get(redirectEndPoint, handleCallBacks)
 
 module.exports = router
