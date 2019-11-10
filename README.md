@@ -54,6 +54,8 @@ GOOGLE_CLIENT_SECRET = RssSmuC2lHqcjGId1FB8FYJs
 GOOGLE_REDIRECT_END_POINT = /youOwnRedirect/EndPoint
 GOOGLE_REDIRECT_URI = https://youGooleGCPAppEngine.url.com
 GOOGLE_CALENDAR_ID = 15suli79te2e0qfd53sdddd8q4g@group.calendar.google.com
+GOOGLE_CALENDAR_SCOPE = https://www.googleapis.com/auth/calendar
+GOOGLE_TOKEN_ACCESS_TYPE = offline
 
 START_OF_DAY = 00:01:00
 END_OF_DAY = 23:59:00
