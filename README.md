@@ -6,7 +6,7 @@ First off, please configure Google Calender API credentials, Port no. inside .en
 then change the name of .env.sample file to .env using below command (for linux and unix), or vice-versa.
 > mv .env.sample .env
 
-## For example:
+#### For example:
 > Before Config
 
 ```
@@ -34,9 +34,12 @@ GOOGLE_CALENDAR_ID = 15suli79te2e0qfd53sdddd8q4g@group.calendar.google.com
 __Please leave other configuration as it is!__
 
 #### For you own GCP, OAuth and Calendar API (OAuth Approach)
-For __Authorized redirect URIs__, we use combination of __GOOGLE_REDIRECT_URI + GOOGLE_REDIRECT_END_POINT__ (from the .env file), that would be, for example,
+> For __Authorized redirect URIs__, we use combination of __GOOGLE_REDIRECT_URI + GOOGLE_REDIRECT_END_POINT__ (from the .env file), that would be, for example,
+
 ``` 	https://quickstart-1569289058700.appspot.com/oauth/callback ```
+
 If you have your own redirect point on your GCP, please update __GOOGLE_REDIRECT_END_POINT__ with your own redirect end-point for example,
+
 ``` https://youGooleGCPAppEngine.url.com/youOwnRedirect/EndPoint ```
 
 For __GOOGLE_CALENDAR_ID__, just use your own Google Calendar's ID.
