@@ -111,7 +111,7 @@ The server is hosted on Google Cloud Platform. Due to the it's limitations, I wa
 
 ``` eg: https://quickstart-1569289058700.appspot.com/book?year=2019&month=11&day=29&hour=14&minute=15 ```
 
-#### About the looger
+#### About the logger
 - Only error and warn level of logs are logged in file called logs.log, however, all level of logs can be traced at console.
 
 
