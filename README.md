@@ -32,12 +32,15 @@ The server is hosted on Google Cloud Platform. Due to the it's limitations, I wa
 
 __Days__ 
 https://quickstart-1569289058700.appspot.com/days?year=YYYY&month=MM
+``` eg: https://quickstart-1569289058700.appspot.com/days?year=2019&month=11 ```
 
 __Timeslots__ 
 https://quickstart-1569289058700.appspot.com/timeslots?year=YYYY&month=MM&day=DD
+``` eg: https://quickstart-1569289058700.appspot.com/timeslots?year=2019&month=11&day=29 ```
 
 __Booking__ 
 https://quickstart-1569289058700.appspot.com/book?year=YYYY&month=MM&day=DD&hour=HH&minute=MM
+``` eg: https://quickstart-1569289058700.appspot.com/book?year=2019&month=11&day=29&hour=14&minute=15 ```
 
 #### About the looger
 - Only error and earn level of logs are logged in file called logs.log, however, all level of logs are can be traced at console.
