@@ -1,8 +1,9 @@
 {
-  "name": "bookingapp",
+  "name": "booking-server",
   "version": "0.1",
-  "main": "server.js",
+  "main": "src/server.js",
   "license": "MIT",
+  "author": "Sarthak Joshi",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
@@ -11,11 +12,12 @@
     "googleapis": "^44.0.0",
     "loadsh": "^0.0.4",
     "moment": "^2.24.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "nodemon": "^1.19.4"
   },
   "scripts": {
-    "start": "TZ=utc nodemon --config nodemon.json src/server.js",
-    "dev": "TZ=utc nodemon --config nodemon.json src/server.js"
+    "start:dev": "TZ=utc nodemon --config nodemon.json src/server.js",
+    "serve": "TZ=utc nodemon --config nodemon.json src/server.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
@@ -23,7 +25,6 @@
     "@babel/node": "^7.2.2",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.1.6",
-    "@babel/runtime": "^7.5.5",
-    "nodemon": "^1.19.4"
+    "@babel/runtime": "^7.5.5"
   }
 }
