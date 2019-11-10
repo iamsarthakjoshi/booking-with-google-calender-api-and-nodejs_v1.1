@@ -13,16 +13,22 @@
     "googleapis": "^44.0.0",
     "loadsh": "^0.0.4",
     "moment": "^2.24.0",
-    "winston": "^3.2.1",
     "nodemon": "^1.19.4",
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/node": "^7.2.2",
-    "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/preset-env": "^7.1.6"
+    "winston": "^3.2.1"
   },
   "scripts": {
     "start": "TZ=utc nodemon --config nodemon.json src/server.js",
-    "dev": "TZ=utc nodemon --config nodemon.json src/server.js"
+    "dev": "TZ=utc nodemon --config nodemon.json src/server.js",
+    "build": "yarn clean && babel -d ./dist ./src",
+    "serve": "TZ=utc node -r dotenv/config dist/server.js",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.1.6",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "@babel/plugin-transform-runtime": "^7.5.5"
   }
 }
