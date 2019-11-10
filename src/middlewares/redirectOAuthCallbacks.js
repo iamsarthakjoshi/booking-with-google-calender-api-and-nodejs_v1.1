@@ -1,4 +1,4 @@
-//import logger from 'common/logger'
+import logger from 'common/logger'
 import { getOriginalRequestedUrl } from 'middlewares/checkLogin'
 import { getAccessToken } from 'services/googleApi'
 
@@ -9,8 +9,8 @@ import { getAccessToken } from 'services/googleApi'
  * @param {Respose} res
  */
 export const handleCallBacks = async (req, res) => {
-  //logger.info('Handling Google OAuthClient CallBack')
-  //logger.info('Requesting Access Token')
+  logger.info('Handling Google OAuthClient CallBack')
+  logger.info('Requesting Access Token')
 
   const {
     query: { code }
@@ -21,7 +21,7 @@ export const handleCallBacks = async (req, res) => {
   /* Wait for an access token based on our OAuth code */
   const token = await getAccessToken(code)
   if (token) {
-    //logger.info('Assigning Access Token to browser cookie')
+    logger.info('Assigning Access Token to browser cookie')
 
     res.cookie('cookieGoogleAccessToken', token, {
       maxAge: 1000 * 60 * 60 * 24 * 365

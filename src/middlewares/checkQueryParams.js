@@ -1,6 +1,6 @@
 import { differenceWith, isEqual, isEmpty, keys } from 'loadsh'
 
-//import logger from 'common/logger'
+import logger from 'common/logger'
 import { sendError } from 'handler/response-handler'
 
 /**
@@ -10,7 +10,7 @@ import { sendError } from 'handler/response-handler'
  * @param {next} next
  */
 export const checkQueryParams = (req, res, next) => {
-  //logger.info('Checking Query Parameters')
+  logger.info('Checking Query Parameters')
   let queryKeyStrings = []
 
   /* Check request path and assign query's keys to variable */
@@ -20,7 +20,7 @@ export const checkQueryParams = (req, res, next) => {
   /* check if any missing params */
   let allMissingParams = getMissingParams(queryKeyStrings, req.query)
   if (!isEmpty(allMissingParams)) {
-    //logger.error(`Request is missing parameter: ${allMissingParams}`)
+    logger.error(`Request is missing parameter: ${allMissingParams}`)
     sendError(res, 501, `Request is missing parameter: ${allMissingParams}`)()
     return
   }

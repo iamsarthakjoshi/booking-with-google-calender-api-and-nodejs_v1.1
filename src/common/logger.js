@@ -6,8 +6,8 @@ const { combine, timestamp, printf, prettyPrint, json, colorize } = format
 const customLevels = {
   levels: {
     error: 0,
-    warn: 2,
-    info: 1,
+    warn: 1,
+    info: 2,
     debug: 4
   },
   colors: {

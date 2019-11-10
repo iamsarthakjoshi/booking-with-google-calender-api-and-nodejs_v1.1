@@ -17,7 +17,7 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "start": "TZ=utc nodemon --config nodemon.json src/server.js",
+    "start": "TZ=utc node -r dotenv/config dist/server.js",
     "dev": "TZ=utc nodemon --config nodemon.json src/server.js",
     "build": "yarn clean && babel -d ./dist ./src",
     "serve": "TZ=utc node -r dotenv/config dist/server.js",

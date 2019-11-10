@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 
 import routes from 'router'
-//import logger from 'common/logger'
+import logger from 'common/logger'
 
 const app = express()
 const PORT = process.env.PORT
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
-  //logger.error(error.message, { stacktrace: error.stack })
+  logger.error(error.message, { stacktrace: error.stack })
   res.status(error.status || 500)
   res.send({
     error: {

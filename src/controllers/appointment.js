@@ -1,6 +1,6 @@
 import { isEmpty } from 'loadsh'
 
-//import logger from 'common/logger'
+import logger from 'common/logger'
 import { sendSuccess, sendError } from 'handler/response-handler'
 import {
   getStartDate,
@@ -20,7 +20,7 @@ import {
  * @param {Response} res
  */
 export const getMonthlyTimeSlotsStatus = async (req, res) => {
-  //logger.info('Serving /days request', req.query)
+  logger.info('Serving /days request', req.query)
 
   try {
     const {
@@ -32,10 +32,10 @@ export const getMonthlyTimeSlotsStatus = async (req, res) => {
 
     const days = await makeMonthlyTimeSlotsStatus(startDate, endDate)
 
-    //logger.info('Timeslots status for each day are fetched!')
+    logger.info('Timeslots status for each day are fetched!')
     sendSuccess(res, 'days')({ days: days })
   } catch (error) {
-    //logger.error(error.message, { stacktrace: error.stack })
+    logger.error(error.message, { stacktrace: error.stack })
     sendError(res, error.code, error.message)()
   }
 }
@@ -46,7 +46,7 @@ export const getMonthlyTimeSlotsStatus = async (req, res) => {
  * @param {Response} res
  */
 export const getTimeSlotsForGivenDay = async (req, res) => {
-  //logger.info('Serving /timeslots request with', req.query)
+  logger.info('Serving /timeslots request with', req.query)
 
   try {
     const {
@@ -58,7 +58,7 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
     const endTime = getDateTime(year, month, day, 23, 59)
 
     const timeSlots = await makeTimeSlotsForGivenDay(startTime, endTime)
-    //logger.info('Timeslots are fetched!')
+    logger.info('Timeslots are fetched!')
     sendSuccess(res, 'timeSlots')(
       isEmpty(timeSlots)
         ? {
@@ -68,7 +68,7 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
         : { timeSlots: timeSlots }
     )
   } catch (error) {
-    //logger.error(error.message, { stacktrace: error.stack })
+    logger.error(error.message, { stacktrace: error.stack })
     sendError(res, error.code, error.message)()
   }
 }
@@ -80,7 +80,7 @@ export const getTimeSlotsForGivenDay = async (req, res) => {
  * @param {Response} res
  */
 export const bookNewAppointment = async (req, res) => {
-  //logger.info('Serving /book request with', req.query)
+  logger.info('Serving /book request with', req.query)
 
   try {
     let {
@@ -92,10 +92,10 @@ export const bookNewAppointment = async (req, res) => {
 
     const bookedTimeSlot = await makeNewAppointment(startTime, endTime)
 
-    //logger.info('Appointment booked!', bookedTimeSlot)
+    logger.info('Appointment booked!', bookedTimeSlot)
     sendSuccess(res, 'booking')(bookedTimeSlot)
   } catch (error) {
-    //logger.error(error.message, { stacktrace: error.stack })
+    logger.error(error.message, { stacktrace: error.stack })
     sendError(res, error.code, error.message)()
   }
 }

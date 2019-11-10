@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { isUndefined, countBy } from 'loadsh'
 
-//import logger from 'common/logger'
+import logger from 'common/logger'
 import { getFilteredBookedAppoinments } from 'common/utils'
 import { getBookedEvents, insertNewEvent } from 'services/googleApi'
 import { isBookingTimeValid } from 'helpers/booking-validation'
@@ -16,7 +16,10 @@ import { getAvailableTimeSlots } from 'helpers/timeslots-impl'
  * @returns {array}
  */
 export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
-  //logger.info('Making time slots for each day for requested month', {startDate: startDate,endDate: endDate})
+  logger.info('Making time slots for each day for requested month', {
+    startDate: startDate,
+    endDate: endDate
+  })
 
   const {
     data: { items }
@@ -34,7 +37,10 @@ export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
  * @returns {Array}
  */
 export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
-  //logger.info('Making time slots for requested day', {startTime: startTime,endTime: endTime})
+  logger.info('Making time slots for requested day', {
+    startTime: startTime,
+    endTime: endTime
+  })
 
   checkWeekends(startTime, endTime)
   return await getAvailableTimeSlots(startTime, endTime)
@@ -47,7 +53,10 @@ export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
  * @returns {Object}
  */
 export const makeNewAppointment = async (startTime, endTime) => {
-  //logger.info('Booking time slots for requested day', {startTime: startTime,endTime: endTime})
+  logger.info('Booking time slots for requested day', {
+    startTime: startTime,
+    endTime: endTime
+  })
 
   const bookingTimeValid = await isBookingTimeValid(startTime)
 
