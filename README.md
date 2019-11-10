@@ -94,8 +94,6 @@ NODE_ENV: production
 > yarn build && yarn serve
 
 #### Google Cloud Platform end-point URLs
-The server is hosted on Google Cloud Platform. Due to the it's limitations, I was not able to implement __winston__ logger here, but it's enabled for local or other uses.
-
 ##### __Days__ 
 > https://quickstart-1569289058700.appspot.com/days?year=YYYY&month=MM
 
