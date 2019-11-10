@@ -55,7 +55,7 @@ function getOAuthClient() {
   return new google.auth.OAuth2(
     config.GOOGLE_CLIENT_ID,
     config.GOOGLE_CLIENT_SECRET,
-    config.GOOGLE_REDIRECT_URI
+    config.GOOGLE_REDIRECT_URI + config.GOOGLE_REDIRECT_END_POINT
   )
 }
 

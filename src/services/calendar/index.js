@@ -5,7 +5,10 @@ import logger from 'common/logger'
 import { getFilteredBookedAppoinments } from 'common/utils'
 import { getBookedEvents, insertNewEvent } from 'services/googleApi'
 import { isBookingTimeValid } from 'helpers/booking-validation'
-import { validateWeekendsAndPast } from 'helpers/date-time-validation'
+import {
+  validateWeekends,
+  validatePastDateTime
+} from 'helpers/date-time-validation'
 import { getTotalTimeSlots } from 'helpers/generate-timeslots'
 import { getAvailableTimeSlots } from 'helpers/timeslots-impl'
 
@@ -27,7 +30,9 @@ export const makeMonthlyTimeSlotsStatus = async (startDate, endDate) => {
 
   const bookedEventsForEachDay = getBookedEventsForEachDay(items)
 
-  validateWeekendsAndPast(startDate)
+  /* Check if requested date time fall on Past date time */
+  validatePastDateTime(endDate)
+
   return getTimeSlotStatus(bookedEventsForEachDay, startDate, endDate)
 }
 
@@ -43,7 +48,12 @@ export const makeTimeSlotsForGivenDay = async (startTime, endTime) => {
     endTime: endTime
   })
 
-  validateWeekendsAndPast(startTime)
+  /* Check if requested date time fall on Past date time */
+  validatePastDateTime(startTime)
+
+  /* Check if requested date time fall on weekends */
+  validateWeekends(startTime)
+
   return await getAvailableTimeSlots(startTime, endTime)
 }
 

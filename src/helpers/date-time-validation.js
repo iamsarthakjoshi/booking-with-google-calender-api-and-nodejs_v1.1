@@ -3,18 +3,26 @@ import moment from 'moment'
 import { throwError } from 'handler/error-handler'
 
 /**
- * Check if given date falls on weekends and past date
+ * Check if given date falls on weekends
  * and throw error if it does
  * @param {Date} dateTime
  */
-export const validateWeekendsAndPast = (dateTime) => {
+export const validateWeekends = (dateTime) => {
   if (isWeekends(dateTime))
     throwError(
       501,
       'DateTime Error',
       'Appointments can only be booked during weekdays'
     )()
+}
 
+/**
+ * Check if given date falls on past date and time
+ * and throw error if it does
+ * @param {Date} dateTime
+ */
+export const validatePastDateTime = (dateTime) => {
+  console.log(moment(dateTime).toDate(), moment().toDate())
   if (moment(dateTime).isBefore(moment())) {
     throwError(501, 'DateTime Error', 'No time slots available for past')()
   }
