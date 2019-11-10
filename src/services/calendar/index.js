@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { isUndefined, countBy } from 'loadsh'
 
-import logger from 'common/logger'
+//import logger from 'common/logger'
 import { getFilteredBookedAppoinments } from 'common/utils'
 import { getBookedEvents, insertNewEvent } from 'services/googleApi'
 import { isBookingTimeValid } from 'helpers/booking-validation'

@@ -1,4 +1,4 @@
-import logger from 'common/logger'
+//import logger from 'common/logger'
 import { setOAuthCredentials, getOAuthClientUrl } from 'services/googleApi'
 
 let originalRequestedUrl

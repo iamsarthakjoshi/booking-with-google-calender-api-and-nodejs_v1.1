@@ -1,6 +1,6 @@
 import { isEmpty } from 'loadsh'
 
-import logger from 'common/logger'
+//import logger from 'common/logger'
 import { sendSuccess, sendError } from 'handler/response-handler'
 import {
   getStartDate,
