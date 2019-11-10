@@ -31,13 +31,13 @@ then change the name of .env.sample file to .env using below command (for linux 
 The server is hosted on Google Cloud Platform. Due to the it's limitations, I was not able to implement __winston__ logger here, but it's enabled for local or other uses.
 
 __Days__ 
-> https://quickstart-1569289058700.appspot.com/days?year=__yyyy__&month=__mm__
+https://quickstart-1569289058700.appspot.com/days?year=YYYY&month=MM
 
 __Timeslots__ 
-https://quickstart-1569289058700.appspot.com/timeslots?year=__yyyyy__&month=__mm__&day=__dd__
+https://quickstart-1569289058700.appspot.com/timeslots?year=YYYY&month=MM&day=DD
 
 __Booking__ 
-> https://quickstart-1569289058700.appspot.com/book?year=__yyyyy__&month=__mm__&day=__dd__&hour=__hh__&minute=__mm__
+https://quickstart-1569289058700.appspot.com/book?year=YYYY&month=MM&day=DD&hour=HH&minute=MM
 
 #### About the looger
 - Only error and earn level of logs are logged in file called logs.log, however, all level of logs are can be traced at console.
