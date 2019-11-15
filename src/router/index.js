@@ -20,4 +20,7 @@ router.get('/book', checkLogin, checkQueryParams, bookNewAppointment)
 
 router.get(redirectEndPoint, handleCallBacks)
 
+/* Handle browser's favicon.ico request */
+router.get('/favicon.ico', (req, res) => res.status(204))
+
 module.exports = router
