@@ -11,10 +11,10 @@ export const getFilteredBookedAppoinments = (items) => {
   return items.filter(
     (data) =>
       data.status === 'confirmed' &&
-      (moment(data.start.dateTime).weekday() !== 0 &&
-        moment(data.start.dateTime).weekday() !== 6) &&
-      (moment(data.start.dateTime).hours() >= 9 &&
-        moment(data.start.dateTime).hours() <= 18)
+      moment(data.start.dateTime).weekday() !== 0 &&
+      moment(data.start.dateTime).weekday() !== 6 &&
+      moment(data.start.dateTime).hours() >= 9 &&
+      moment(data.start.dateTime).hours() <= 18
   )
 }
 

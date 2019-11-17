@@ -4,3 +4,4 @@ node_modules
 .env.backup
 **/.DS_Store
 .DS_Store
+token.json

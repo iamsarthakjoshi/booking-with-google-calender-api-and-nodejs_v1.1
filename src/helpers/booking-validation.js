@@ -31,7 +31,7 @@ export const isBookingTimeValid = async (appointmentBookingTime) => {
   if (!moment(startTime).isBetween(apptStartTime, apptEndTime, 'hours', '[]')) {
     throwError(501, 'Booking Error', 'Cannot book outside bookable timeframe')()
   }
-  if (await isGivenTimeMatched()) {
+  if (await isGivenTimeMatched(startTime)) {
     throwError(501, 'Booking Error', 'Invalid time slot')()
   }
   return true
