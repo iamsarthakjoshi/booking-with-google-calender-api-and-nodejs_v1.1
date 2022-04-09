@@ -12,7 +12,7 @@
     "express": "^4.17.1",
     "googleapis": "^44.0.0",
     "loadsh": "^0.0.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "nodemon": "^1.19.4",
     "winston": "^3.2.1"
   },
